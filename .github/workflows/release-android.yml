@@ -1,0 +1,34 @@
+# Publishes the BTS Android app as a GitHub release so the download link keeps working after Expo removes its copy.
+# To publish a new version later: change TAG, APK_URL and APK_SHA256 below (or run this workflow by hand), and commit.
+name: Publish BTS Android app
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/release-android.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: v1.1.0
+      APK_URL: https://expo.dev/artifacts/eas/GKgxcuKFThSewAkzABMrpPpi0wns7UXB1akjx99a36o.apk
+      APK_SHA256: 820334c6346ca3fe3868592e6709f46f1e1ea128cbed180eca64ee6cf3c119e1
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download the app file and check it
+        run: |
+          curl -fsSL -o bts-android.apk "$APK_URL"
+          ls -l bts-android.apk
+          echo "$APK_SHA256  bts-android.apk" | sha256sum -c -
+      - name: Publish the release
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, nothing to do."
+          else
+            gh release create "$TAG" bts-android.apk --repo "$GITHUB_REPOSITORY" --title "BTS Android app ${TAG#v}" --notes "The BTS Android app (version ${TAG#v}). Download bts-android.apk below and open it on your phone." --latest
+          fi

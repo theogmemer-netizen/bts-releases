@@ -15,9 +15,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      TAG: v1.2.0
-      APK_URL: https://expo.dev/artifacts/eas/X30qTRgQe1yz1IyWS4b-YFEkKqxgcbjBMbB2TnENXmM.apk
-      APK_SHA256: 1edf500b3404f6fb88e139fa91f0331695b73343554369c1c8948af4d18056f6
+      TAG: v1.2.1
+      APK_URL: https://expo.dev/artifacts/eas/Mx5gJTTD5Rqz9ZwyAc-gHUa5qQFIbUul7xx_xjRidXQ.apk
+      APK_SHA256: f86914ee31909276e74e6594c341f3dee2cc4575fdd0bfca35a9b9a232e34ce1
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Download the app file and check it
